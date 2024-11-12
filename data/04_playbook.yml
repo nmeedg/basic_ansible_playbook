@@ -1,0 +1,12 @@
+- name: "Install package on dbsever"
+  hosts: dbserver
+  remote_user: vagrant
+  become: yes
+  tasks:
+    - name: "Test Internet Connectivity"
+      ansible.builtin.shell: ping -c 4 google.com
+
+    - name: "Install neofetch"
+      apk:
+        name: neofetch
+        state: present

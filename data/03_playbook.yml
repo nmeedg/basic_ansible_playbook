@@ -1,0 +1,16 @@
+- name: iteration on ansible playbook
+  hosts: webserver
+  tasks:
+    - name: "Creating folder"
+      file:
+        path: "/tmp/devit/{{item}}"
+        recurse: yes
+      with_items:
+        - test1
+        - test2
+        - test3
+    - name: "Create another folder with hostnames"
+      file:
+        path: "{{item.dir}}/{{item.name}}"
+        state: "touch"
+      with_items: "{{infodic}}"
