@@ -1,0 +1,29 @@
+- name: ansible playbook module stat
+  remote_user: vagrant
+  hosts: webserver
+  tasks:
+    - name: create my directory
+      file:
+        path: "/tmp/myfolder"
+        state: directory
+        recurse: yes
+        owner: vagrant
+        group: vagrant
+
+    - name: create file
+      file:
+        path: "/tmp/myfolder/test.md"
+        state: "touch"
+        owner: vagrant
+        mode: 0755
+    - name: analyse avec stat
+      stat:
+        path: "/tmp/myfolder/test.md"
+      register: __stat_dev
+    - name: Debugging
+      debug:
+        var: __stat_dev
+
+    - name: desplay something
+      shell:
+        cmd: echo hello world

@@ -1,0 +1,21 @@
+- name: my playbook ansible
+  remote_user: vagrant
+  hosts: webserver
+  tasks:
+    - name: Check connectivity
+      ping:
+    - name: Show environment variables
+      debug:
+        msg: "{{var1}}"
+    - name: create directory
+      file:
+        path: "/tmp/ans/fax"
+        state: directory
+        recurse: yes
+        owner: vagrant
+        group: vagrant
+    - name: create a file
+      file:
+        path: "/tmp/ans/fax/info.html"
+        state: "touch"
+        

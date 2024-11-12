@@ -1,0 +1,17 @@
+- name: Second enventory for users
+  hosts: webserver
+  become: yes
+  remote_user: vagrant
+  tasks:
+    - name: creating user devit
+      user:
+        name: devit
+        state: present
+        password: "{{ 'edg' | password_hash('sha512') }}"
+        groups: vagrant
+        uid: 1200
+    - name: remove user added
+      user:
+        name: devit
+        state: absent
+        
