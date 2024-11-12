@@ -1,0 +1,42 @@
+- name: Create and deploy ssh keys
+  remote_user: vagrant
+  become: yes
+  hosts: dbserver
+  tasks:
+    - name: Generate ssh key on my localhost
+      openssh_keypair:
+        comment: ssh key to connect to my node
+        group: vagrant
+        owner: vagrant
+        path: /home/vagrant/mykey/id_dev_rsa
+        size: 4096
+        state: present
+        type: rsa
+      delegate_to: localhost
+      run_once: yes
+
+    - name: create user with name devops
+      user:
+        name: devops
+        append: yes
+        comment: account for devops user
+        state: present
+        groups: vagrant
+        password: "{{ 'edg' | password_hash('sha512') }}"
+
+    - name: Add to sudoers
+      copy:
+        dest: "/etc/sudoers.d/devops"
+        content: "devops ALL=(ALL) NOPASSWD: ALL"
+
+    - name: Add generated ssh key to my node
+      authorized_key:
+        user: devops
+        comment: sending public ssh key to node
+        key: "{{ lookup('file','/home/vagrant/mykey/id_dev_rsa.pub') }}"
+        state: present
+
+    - name: Debugging
+      debug:
+        msg: "{{var1}}"
+

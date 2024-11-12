@@ -1,0 +1,41 @@
+- name: Reboot module test
+  remote_user: vagrant
+  hosts: dbserver
+  become: yes
+  tasks:
+    - name: create directory
+      file:
+        path: "/tmp/devit"
+        state: directory
+        group: vagrant
+
+    - name: create file
+      file:
+        path: "/tmp/devit/test.md"
+        state: touch
+        mode: 0755
+
+    - name: statistique of file
+      stat:
+        path: "/tmp/devit/test.md"
+      register: __file_stat
+
+    - name: Debug variables
+      debug:
+        msg: "{{ __file_stat }}"
+    
+    - name: Rebooting of VMs
+      reboot:
+        msg: "Debut du reboot"
+        test_command: uptime
+        pre_reboot_delay: 2
+        post_reboot_delay: 5
+      when: __file_stat.stat.exists
+
+    - name: Command after reboot
+      file:
+        path: "/tmp/test.txt"
+        state: "touch"
+
+
+      
