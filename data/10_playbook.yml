@@ -1,0 +1,39 @@
+- name: Automate reloading of nginx on alpine when env variables changes
+  remote_user: vagrant
+  become: yes
+  hosts: dbserver
+  tasks:
+    - name: Install packages
+      apk:
+        name: curl, nginx
+        state: present
+        update_cache: yes
+
+    - name: remove nginx default config
+      file:
+        path: /etc/nginx/http.d/default.conf
+        state: absent
+
+    - name: copy new file config template
+      template:
+        backup: yes
+        dest: /etc/nginx/http.d/default.conf
+        src: default.conf.j2
+        group: vagrant
+        owner: vagrant
+        mode: 0644
+      notify: reload_nginx
+
+    - name: start nginx service
+      service:
+        name: nginx
+        state: started
+
+  handlers:
+    - name: reload_nginx
+      service:
+        name: nginx
+        state: restarted
+
+
+

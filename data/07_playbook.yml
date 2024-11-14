@@ -1,0 +1,11 @@
+- name: Playbook for file copy
+  remote_user: vagrant
+  hosts: webserver
+  become: yes
+  tasks:
+    - name: Copy playbooks
+      copy:
+        src: /vagrant/copy.md
+        dest: /tmp/copy.md
+        backup: yes
+

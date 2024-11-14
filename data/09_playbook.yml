@@ -1,0 +1,45 @@
+- name: Automation playbook
+  remote_user: vagrant
+  hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: install nginx on local
+      apt:
+        name: nginx
+        state: present
+    - name: started nginx service
+      service:
+        name: nginx
+        state: started
+    - name: remove default nginx configuration                 
+      file:  
+        path: "{{item}}"
+        state: absent
+      with_fileglob:                                                                        
+        - "/var/www/html/*"
+
+    - name: add right
+      file:
+        path: "/var/www/html"
+        state: directory
+        recurse: yes
+        group: vagrant
+        owner: vagrant
+
+- name: Recuperation du site web
+  remote_user: vagrant
+  hosts: dbserver
+  tasks:
+    - name: Install rsync on alpine guest
+      apk:
+        name: rsync
+        state: present
+
+    - name: fetch neccessary folder
+      synchronize:
+        src: "/home/vagrant/mywebsite/"
+        dest: "/var/www/html"
+        mode: pull
+
+

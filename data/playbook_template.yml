@@ -1,0 +1,14 @@
+- name: Playbook for template with jinja 2
+  hosts: webserver
+  vars:
+    mine: Hello world
+  tasks:
+    - name: use template for create file
+      template:
+        src: mytemplate.md.j2
+        dest: /tmp/mytemplate.md
+        backup: yes
+        owner: vagrant
+        group: vagrant
+        mode: 0644
+

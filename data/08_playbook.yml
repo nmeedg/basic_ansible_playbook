@@ -1,0 +1,11 @@
+- name: Try fetch module in ansible
+  remote_user: vagrant
+  hosts: webserver
+  become: yes
+  tasks:
+    - name : using fetch module to try
+      fetch:
+        src: "/etc/hosts"
+        dest: "/tmp/myconfig_{{inventory_hostname}}.txt"
+        flat: yes
+        

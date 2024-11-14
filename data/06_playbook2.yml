@@ -1,0 +1,14 @@
+- name: Try tinny something
+  remote_user: vagrant
+  hosts: dbserver
+  tasks:
+    - name: create file in tmp dir
+      file:
+        path: "/tmp/test.txt"
+        state: touch
+        group: vagrant
+        mode: 0777
+        owner: vagrant
+      delegate_to: localhost
+      run_once: yes
+
