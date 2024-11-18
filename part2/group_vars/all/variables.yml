@@ -1,0 +1,5 @@
+var1: "All server"
+infodic:
+  - {dir: "/tmp",name: "info1"}
+  - {dir: "/tmp", name: "info2"}
+  - {dir: "/tmp", name: "info3"}

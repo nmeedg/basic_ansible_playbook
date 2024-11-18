@@ -1,0 +1,23 @@
+---
+# tasks file for roles/users
+
+- name: Create user with name devops
+  user:
+    name: devops
+    comment: user for devops and pupeline cicd
+    groups: sudo
+    shell: /usr/bash
+    password: "{{ 'edg' | password_hash('sha512') }}"
+    append: yes
+
+
+- name: Add user to sudoers
+  copy:
+    dest: "/etc/sudoers.d/devops"
+    content: "devops ALL=(ALL) NOPASSWD: ALL"
+
+- name: Deploy ssh key
+  authorized_key:
+    user: devops
+    key: "{{lookup('file','/home/vagrant/remote_keys/node_id_rsa.pub')}}"
+    state: present

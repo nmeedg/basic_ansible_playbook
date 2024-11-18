@@ -1,0 +1,13 @@
+- name: Creation de la cle ssh pour le nouvel utilisateur
+  connection: local
+  hosts: localhost
+  become: yes
+  roles:
+    - ssh_keygen
+
+- name: Creation des utilisateurs et installations des serveurs
+  hosts: otherserver
+  become: yes
+  roles:
+    - users
+    - nginx

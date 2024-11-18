@@ -1,0 +1,17 @@
+---
+# tasks file for roles/ssh_keygen
+- name: Create directory
+  file:
+    path: "/home/vagrant/remote_keys"
+    state: directory
+    owner: vagrant
+    group: vagrant
+
+- name: Create ssh keyppair for remote connexion
+  openssh_keypair:
+    path: /home/vagrant/remote_keys/node_id_rsa
+    size: 4096
+    owner: vagrant
+    state: present
+    type: rsa
+
